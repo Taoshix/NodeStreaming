@@ -5,19 +5,115 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Video Streaming With Node</title>
-        <style>
-            body {
-                margin: 5% auto;
-                max-width: 100%;
-                background-color: rgb(14, 14, 14);
-                padding-top: 10%;
-                padding-left: 35%;
-            }
-        </style>
+        <link rel="stylesheet" href="/style.css" />
     </head>
     <body>
-        <video id="videoPlayer" width="50%" controls muted="muted" autoplay>
-            <source src="/video" type="video/mp4" />
-        </video>
+        <script>
+            async function loadContent() {
+                const response = await fetch('/content');
+                const content = await response.json();
+
+                const container = document.createElement('div');
+                container.className = 'container';
+
+                content.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+
+                    const img = document.createElement('img');
+                    img.src = item.cover || 'default-cover.jpg';
+                    img.alt = item.title;
+
+                    const title = document.createElement('p');
+                    title.textContent = item.title;
+
+                    card.appendChild(img);
+                    card.appendChild(title);
+
+                    card.onclick = () => {
+                        window.location.href = `/content/${item.title}`;
+                    };
+
+                    container.appendChild(card);
+                });
+
+                const skeletonCount = Math.ceil(window.innerWidth / 220) - content.length;
+                for (let i = 0; i < skeletonCount; i++) {
+                    const skeletonCard = document.createElement('div');
+                    skeletonCard.className = 'skeleton-card';
+
+                    container.appendChild(skeletonCard);
+                }
+
+                document.body.innerHTML = '';
+                document.body.appendChild(container);
+            }
+
+            async function loadEpisodes(folder) {
+                if (!folder) {
+                    console.error("Folder parameter is missing");
+                    return;
+                }
+
+                const response = await fetch(`/content/${folder}/episodes`);
+                if (!response.ok) {
+                    console.error("Failed to fetch episodes", response.status);
+                    return;
+                }
+
+                const episodes = await response.json();
+
+                const sidebar = document.createElement('div');
+                sidebar.className = 'sidebar';
+
+                const backButton = document.createElement('button');
+                backButton.className = 'back-button';
+                backButton.textContent = 'Back';
+                backButton.onclick = () => {
+                    window.location.href = '/';
+                };
+
+                sidebar.appendChild(backButton);
+
+                const videoPlayer = document.createElement('video');
+                videoPlayer.className = 'video-player';
+                videoPlayer.controls = true;
+                videoPlayer.muted = false;
+                videoPlayer.autoplay = true;
+
+                if (episodes.length > 0) {
+                    videoPlayer.src = `/content/${folder}/${episodes[0]}`;
+                }
+
+                document.body.appendChild(videoPlayer);
+
+                episodes.forEach((episode) => {
+                    const episodeLink = document.createElement('div');
+                    episodeLink.textContent = episode;
+                    episodeLink.style.color = 'white';
+                    episodeLink.style.cursor = 'pointer';
+                    episodeLink.style.marginBottom = '10px';
+
+                    episodeLink.onclick = () => {
+                        videoPlayer.src = `/content/${folder}/${episode}`;
+                    };
+
+                    sidebar.appendChild(episodeLink);
+                });
+
+                document.body.innerHTML = '';
+                document.body.appendChild(sidebar);
+                document.body.appendChild(videoPlayer);
+            }
+
+            const pathParts = window.location.pathname.split('/');
+            const folder = decodeURIComponent(pathParts[pathParts.length - 2]);
+
+            if (pathParts.includes('content')) {
+                loadEpisodes(folder);
+            } else {
+                loadContent();
+            }
+        </script>
     </body>
 </html>
