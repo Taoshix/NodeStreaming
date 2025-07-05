@@ -45,7 +45,7 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 15%;
+    width: 10%;
     height: 100%;
     background-color: rgb(30, 30, 30);
     overflow-y: auto;
@@ -55,17 +55,71 @@ body {
 .back-button {
     margin-bottom: 20px;
     padding: 10px;
-    background-color: rgb(50, 50, 50);
+    background-color: rgb(70, 70, 70);
     color: white;
-    border: none;
+    border: 2px solid rgb(100, 100, 100);
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: rgb(100, 100, 100);
 }
 
 .video-player {
     position: absolute;
-    top: 50%;
-    left: 60%;
+    top: 45%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 70%;
     height: auto;
+}
+
+.control-panel {
+    position: absolute;
+    top: 95%; /* Positioned below the video player */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    background-color: rgb(50, 50, 50);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.control-panel button {
+    padding: 10px;
+    background-color: rgb(70, 70, 70);
+    color: white;
+    border: 2px solid rgb(100, 100, 100);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.control-panel button:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+.control-panel label {
+    font-size: 16px;
+    color: white;
+    margin-left: 10px;
+}
+
+.control-panel input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.sidebar div {
+    font-size: 18px;
+    color: white;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-bottom: 1px solid rgb(50, 50, 50);
 }
