@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="/style.css" />
     </head>
     <body>
+        <div class="top-bar">Localhost Streaming Site</div>
         <script>
             async function loadContent() {
                 const response = await fetch('/content');
@@ -37,7 +38,7 @@
                     container.appendChild(card);
                 });
 
-                const skeletonCount = Math.ceil(window.innerWidth / 220) - content.length;
+                const skeletonCount = Math.ceil(window.innerWidth * 0.9 / 220) - content.length;
                 for (let i = 0; i < skeletonCount; i++) {
                     const skeletonCard = document.createElement('div');
                     skeletonCard.className = 'skeleton-card';
@@ -45,8 +46,11 @@
                     container.appendChild(skeletonCard);
                 }
 
-                document.body.innerHTML = '';
-                document.body.appendChild(container);
+                const contentSection = document.createElement('div');
+                contentSection.id = 'content-section';
+                contentSection.appendChild(container);
+
+                document.body.appendChild(contentSection);
             }
 
             async function loadEpisodes(folder) {
@@ -85,8 +89,6 @@
                     videoPlayer.src = `/content/${folder}/${episodes[0]}`;
                 }
 
-                document.body.appendChild(videoPlayer);
-
                 episodes.forEach((episode) => {
                     const episodeLink = document.createElement('div');
                     episodeLink.textContent = episode;
@@ -100,9 +102,6 @@
 
                     sidebar.appendChild(episodeLink);
                 });
-
-                document.body.style.backgroundColor = 'rgb(14, 14, 14)';
-                document.body.style.color = 'white';
 
                 const controlPanel = document.createElement('div');
                 controlPanel.className = 'control-panel';
@@ -137,7 +136,11 @@
                     }
                 };
 
-                document.body.innerHTML = '';
+                const contentSection = document.getElementById('content-section');
+                if (contentSection) {
+                    contentSection.remove();
+                }
+
                 document.body.appendChild(sidebar);
                 document.body.appendChild(videoPlayer);
                 document.body.appendChild(controlPanel);
