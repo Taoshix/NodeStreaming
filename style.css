@@ -170,3 +170,13 @@ body {
     vertical-align: middle; /* Align label with checkbox */
     line-height: 20px; /* Match the checkbox height for proper alignment */
 }
+
+body.dark-mode {
+    background-color: rgb(14, 14, 14);
+    color: white;
+}
+
+body.light-mode {
+    background-color: white;
+    color: black;
+}

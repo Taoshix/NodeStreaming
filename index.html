@@ -114,9 +114,9 @@
                 toggleModeButton.textContent = 'Toggle Light/Dark Mode';
                 toggleModeButton.style.marginRight = '10px';
                 toggleModeButton.onclick = () => {
-                    const isDarkMode = document.body.style.backgroundColor === 'rgb(14, 14, 14)';
-                    document.body.style.backgroundColor = isDarkMode ? 'white' : 'rgb(14, 14, 14)';
-                    document.body.style.color = isDarkMode ? 'black' : 'white';
+                    const isDarkMode = document.body.classList.contains('dark-mode');
+                    document.body.classList.toggle('dark-mode', !isDarkMode);
+                    document.body.classList.toggle('light-mode', isDarkMode);
                 };
 
                 const autoNextContainer = document.createElement('div');
