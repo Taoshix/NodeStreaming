@@ -1,0 +1,30 @@
+{
+  "name": "nodestreaming",
+  "version": "1.0.0",
+  "description": "local streaming site",
+  "keywords": [
+    "local",
+    "streaming",
+    "site"
+  ],
+  "homepage": "https://github.com/Taoshix/NodeStreaming#readme",
+  "bugs": {
+    "url": "https://github.com/Taoshix/NodeStreaming/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Taoshix/NodeStreaming.git"
+  },
+  "license": "ISC",
+  "author": "Taoshix",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
