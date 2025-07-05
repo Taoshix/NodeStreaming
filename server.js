@@ -16,11 +16,12 @@ app.use((req, res, next) => {
     next();
 });
 
+// Route to serve the index.html file
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/index.html");
 });
 
-// Ensure dynamic routes are handled correctly
+// Route to fetch episodes in a specific folder
 app.get("/content/:folder/episodes", function (req, res) {
     const folder = decodeURIComponent(req.params.folder);
     console.log("Decoded folder name for episodes:", folder);
@@ -40,7 +41,7 @@ app.get("/content/:folder/episodes", function (req, res) {
     res.json(episodes);
 });
 
-// Updated /content/:folder/:episode route to handle non-video files
+// Route to fetch a specific episode
 app.get("/content/:folder/:episode", function (req, res) {
     const folder = req.params.folder;
     const episode = req.params.episode;
@@ -52,6 +53,7 @@ app.get("/content/:folder/:episode", function (req, res) {
 
     const fileExtension = path.extname(videoPath);
 
+    // Only handle video files with .mp4 extension for streaming
     if (fileExtension === ".mp4") {
         const videoSize = fs.statSync(videoPath).size;
         const range = req.headers.range;
@@ -99,7 +101,6 @@ app.get("/content", function (req, res) {
     res.json(metadata);
 });
 
-// Updated /content/:folder route to dynamically serve the video player for the folder
 app.get("/content/:folder", function (req, res) {
     const folder = req.params.folder;
     const contentDir = path.join(__dirname, "content", folder);

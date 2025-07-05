@@ -38,12 +38,16 @@
                     container.appendChild(card);
                 });
 
-                const skeletonCount = Math.ceil(window.innerWidth * 0.9 / 220) - content.length;
-                for (let i = 0; i < skeletonCount; i++) {
-                    const skeletonCard = document.createElement('div');
-                    skeletonCard.className = 'skeleton-card';
+                const totalCards = content.length;
+                const cardsPerRow = Math.floor(window.innerWidth / 220);
+                const skeletonCount = cardsPerRow - (totalCards % cardsPerRow);
+                if (skeletonCount < cardsPerRow) {
+                    for (let i = 0; i < skeletonCount; i++) {
+                        const skeletonCard = document.createElement('div');
+                        skeletonCard.className = 'skeleton-card';
 
-                    container.appendChild(skeletonCard);
+                        container.appendChild(skeletonCard);
+                    }
                 }
 
                 const contentSection = document.createElement('div');
