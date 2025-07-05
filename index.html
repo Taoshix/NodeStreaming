@@ -101,9 +101,47 @@
                     sidebar.appendChild(episodeLink);
                 });
 
+                document.body.style.backgroundColor = 'rgb(14, 14, 14)';
+                document.body.style.color = 'white';
+
+                const controlPanel = document.createElement('div');
+                controlPanel.style.marginTop = '20px';
+                controlPanel.style.textAlign = 'center';
+
+                const toggleModeButton = document.createElement('button');
+                toggleModeButton.textContent = 'Toggle Light/Dark Mode';
+                toggleModeButton.style.marginRight = '10px';
+                toggleModeButton.onclick = () => {
+                    const isDarkMode = document.body.style.backgroundColor === 'rgb(14, 14, 14)';
+                    document.body.style.backgroundColor = isDarkMode ? 'white' : 'rgb(14, 14, 14)';
+                    document.body.style.color = isDarkMode ? 'black' : 'white';
+                };
+
+                const autoNextCheckbox = document.createElement('input');
+                autoNextCheckbox.type = 'checkbox';
+                autoNextCheckbox.id = 'autoNext';
+                const autoNextLabel = document.createElement('label');
+                autoNextLabel.textContent = 'Auto Next';
+                autoNextLabel.htmlFor = 'autoNext';
+                autoNextLabel.style.marginLeft = '10px';
+
+                controlPanel.appendChild(toggleModeButton);
+                controlPanel.appendChild(autoNextCheckbox);
+                controlPanel.appendChild(autoNextLabel);
+
+                videoPlayer.onended = () => {
+                    if (autoNextCheckbox.checked) {
+                        const currentIndex = episodes.indexOf(videoPlayer.src.split('/').pop());
+                        if (currentIndex >= 0 && currentIndex < episodes.length - 1) {
+                            videoPlayer.src = `/content/${folder}/${episodes[currentIndex + 1]}`;
+                        }
+                    }
+                };
+
                 document.body.innerHTML = '';
                 document.body.appendChild(sidebar);
                 document.body.appendChild(videoPlayer);
+                document.body.appendChild(controlPanel);
             }
 
             const pathParts = window.location.pathname.split('/');
