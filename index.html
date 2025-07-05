@@ -119,17 +119,22 @@
                     document.body.style.color = isDarkMode ? 'black' : 'white';
                 };
 
+                const autoNextContainer = document.createElement('div');
+                autoNextContainer.className = 'auto-next-container';
+
                 const autoNextCheckbox = document.createElement('input');
                 autoNextCheckbox.type = 'checkbox';
                 autoNextCheckbox.id = 'autoNext';
+
                 const autoNextLabel = document.createElement('label');
                 autoNextLabel.textContent = 'Auto Next';
                 autoNextLabel.htmlFor = 'autoNext';
-                autoNextLabel.style.marginLeft = '10px';
+
+                autoNextContainer.appendChild(autoNextCheckbox);
+                autoNextContainer.appendChild(autoNextLabel);
 
                 controlPanel.appendChild(toggleModeButton);
-                controlPanel.appendChild(autoNextCheckbox);
-                controlPanel.appendChild(autoNextLabel);
+                controlPanel.appendChild(autoNextContainer);
 
                 videoPlayer.onended = () => {
                     if (autoNextCheckbox.checked) {

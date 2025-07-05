@@ -91,6 +91,9 @@ body {
     padding: 10px;
     border-radius: 5px;
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .control-panel button {
@@ -111,13 +114,15 @@ body {
 .control-panel label {
     font-size: 16px;
     color: white;
-    margin-left: 10px;
+    text-align: left;
+    align-content: center;
 }
 
 .control-panel input[type="checkbox"] {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    margin-right: 8px;
 }
 
 .sidebar div {
@@ -142,4 +147,26 @@ body {
     font-size: 20px;
     font-weight: bold;
     z-index: 1000;
+}
+
+.control-panel .auto-next-container {
+    display: inline-flex;
+    padding: 10px;
+    background-color: rgb(70, 70, 70);
+    color: white;
+    border: 2px solid rgb(100, 100, 100);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.control-panel .auto-next-container:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+.control-panel .auto-next-container label {
+    display: inline-block;
+    vertical-align: middle; /* Align label with checkbox */
+    line-height: 20px; /* Match the checkbox height for proper alignment */
 }
