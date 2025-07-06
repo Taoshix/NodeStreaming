@@ -94,8 +94,11 @@
                 }
 
                 episodes.forEach((episode) => {
+                    const episodeNumberMatch = episode.match(/(\d+)/);
+                    const episodeNumber = episodeNumberMatch ? `Episode ${episodeNumberMatch[1]}` : episode;
+
                     const episodeLink = document.createElement('div');
-                    episodeLink.textContent = episode;
+                    episodeLink.textContent = episodeNumber;
                     episodeLink.style.color = 'white';
                     episodeLink.style.cursor = 'pointer';
                     episodeLink.style.marginBottom = '10px';
@@ -156,7 +159,7 @@
             }
 
             const pathParts = window.location.pathname.split('/');
-            const folder = decodeURIComponent(pathParts[pathParts.length - 2]);
+            const folder = pathParts[pathParts.indexOf('content') + 1];
 
             if (pathParts.includes('content')) {
                 loadEpisodes(folder);
