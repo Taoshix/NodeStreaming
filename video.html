@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title id="pagetitle">Video Player</title>
+        <link rel="stylesheet" href="/style.css" />
+    </head>
+    <body>
+        <div class="top-bar">Localhost Streaming Site</div>
+        <h1 class="content-selection" id="content-selection"></h1>
+        <div class="sidebar">
+            <button class="back-button" onclick="window.location.href = '/'">Back</button>
+            <div id="episode-list"></div>
+        </div>
+        <video class="video-player" controls autoplay muted></video>
+        <div class="control-panel">
+            <button onclick="toggleMode()">Toggle Light/Dark Mode</button>
+            <div class="auto-next-container">
+                <input type="checkbox" id="autoNext" />
+                <label for="autoNext">Auto Next</label>
+            </div>
+        </div>
+        <script>
+            function toggleMode() {
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                document.body.classList.toggle('dark-mode', !isDarkMode);
+                document.body.classList.toggle('light-mode', isDarkMode);
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const folder = urlParams.get('folder');
+            const contentName = decodeURIComponent(folder);
+            document.getElementById('content-selection').textContent = contentName;
+            document.getElementById('pagetitle').textContent = `Video Player - ${contentName}`;
+
+            async function loadEpisodes() {
+                const response = await fetch(`/content/${folder}/episodes`);
+                const episodes = await response.json();
+
+                const episodeList = document.getElementById('episode-list');
+                const videoPlayer = document.querySelector('.video-player');
+
+                if (episodes.length > 0) {
+                    videoPlayer.src = `/content/${folder}/${episodes[0]}`;
+                }
+
+                episodes.forEach((episode) => {
+                    const episodeNumberMatch = episode.match(/(\d+)/);
+                    const episodeNumber = episodeNumberMatch ? `Episode ${episodeNumberMatch[1]}` : episode;
+
+                    const episodeLink = document.createElement('div');
+                    episodeLink.textContent = episodeNumber;
+                    episodeLink.style.color = 'white';
+                    episodeLink.style.cursor = 'pointer';
+                    episodeLink.style.marginBottom = '10px';
+
+                    episodeLink.onclick = () => {
+                        videoPlayer.src = `/content/${folder}/${episode}`;
+                    };
+
+                    episodeList.appendChild(episodeLink);
+                });
+
+                videoPlayer.onended = () => {
+                    const autoNextCheckbox = document.getElementById('autoNext');
+                    if (autoNextCheckbox.checked) {
+                        const currentIndex = episodes.indexOf(videoPlayer.src.split('/').pop());
+                        if (currentIndex >= 0 && currentIndex < episodes.length - 1) {
+                            videoPlayer.src = `/content/${folder}/${episodes[currentIndex + 1]}`;
+                        }
+                    }
+                };
+            }
+
+            loadEpisodes();
+        </script>
+    </body>
+</html>

@@ -37,7 +37,7 @@
                     card.appendChild(title);
 
                     card.onclick = () => {
-                        window.location.href = `/content/${item.title}`;
+                        window.location.href = `/video.html?folder=${encodeURIComponent(item.title)}`;
                     };
 
                     container.appendChild(card);
@@ -59,119 +59,10 @@
                 contentSection.appendChild(container);
             }
 
-            async function loadEpisodes(folder) {
-                if (!folder) {
-                    console.error("Folder parameter is missing");
-                    return;
-                }
-
-                const response = await fetch(`/content/${folder}/episodes`);
-                if (!response.ok) {
-                    console.error("Failed to fetch episodes", response.status);
-                    return;
-                }
-
-                const episodes = await response.json();
-
-                const sidebar = document.createElement('div');
-                sidebar.className = 'sidebar';
-
-                const backButton = document.createElement('button');
-                backButton.className = 'back-button';
-                backButton.textContent = 'Back';
-                backButton.onclick = () => {
-                    window.location.href = '/';
-                };
-
-                sidebar.appendChild(backButton);
-
-                const videoPlayer = document.createElement('video');
-                videoPlayer.className = 'video-player';
-                videoPlayer.controls = true;
-                videoPlayer.muted = false;
-                videoPlayer.autoplay = true;
-
-                if (episodes.length > 0) {
-                    videoPlayer.src = `/content/${folder}/${episodes[0]}`;
-                }
-
-                episodes.forEach((episode) => {
-                    const episodeNumberMatch = episode.match(/(\d+)/);
-                    const episodeNumber = episodeNumberMatch ? `Episode ${episodeNumberMatch[1]}` : episode;
-
-                    const episodeLink = document.createElement('div');
-                    episodeLink.textContent = episodeNumber;
-                    episodeLink.style.color = 'white';
-                    episodeLink.style.cursor = 'pointer';
-                    episodeLink.style.marginBottom = '10px';
-
-                    episodeLink.onclick = () => {
-                        videoPlayer.src = `/content/${folder}/${episode}`;
-                    };
-
-                    sidebar.appendChild(episodeLink);
-                });
-
-                const controlPanel = document.createElement('div');
-                controlPanel.className = 'control-panel';
-
-                const toggleModeButton = document.createElement('button');
-                toggleModeButton.textContent = 'Toggle Light/Dark Mode';
-                toggleModeButton.style.marginRight = '10px';
-                toggleModeButton.onclick = () => {
-                    const isDarkMode = document.body.classList.contains('dark-mode');
-                    document.body.classList.toggle('dark-mode', !isDarkMode);
-                    document.body.classList.toggle('light-mode', isDarkMode);
-                };
-
-                const autoNextContainer = document.createElement('div');
-                autoNextContainer.className = 'auto-next-container';
-
-                const autoNextCheckbox = document.createElement('input');
-                autoNextCheckbox.type = 'checkbox';
-                autoNextCheckbox.id = 'autoNext';
-
-                const autoNextLabel = document.createElement('label');
-                autoNextLabel.textContent = 'Auto Next';
-                autoNextLabel.htmlFor = 'autoNext';
-
-                autoNextContainer.appendChild(autoNextCheckbox);
-                autoNextContainer.appendChild(autoNextLabel);
-
-                controlPanel.appendChild(toggleModeButton);
-                controlPanel.appendChild(autoNextContainer);
-
-                videoPlayer.onended = () => {
-                    if (autoNextCheckbox.checked) {
-                        const currentIndex = episodes.indexOf(videoPlayer.src.split('/').pop());
-                        if (currentIndex >= 0 && currentIndex < episodes.length - 1) {
-                            videoPlayer.src = `/content/${folder}/${episodes[currentIndex + 1]}`;
-                        }
-                    }
-                };
-
-                const contentSection = document.getElementById('content-section');
-                if (contentSection) {
-                    contentSection.remove();
-                }
-                const contentselection = document.getElementById('content-selection');
-                if (contentselection) {
-                    contentselection.innerHTML = decodeURIComponent(folder);
-                }
-
-                document.body.appendChild(sidebar);
-                document.body.appendChild(videoPlayer);
-                document.body.appendChild(controlPanel);
-            }
-
             const pathParts = window.location.pathname.split('/');
             const folder = pathParts[pathParts.indexOf('content') + 1];
 
-            if (pathParts.includes('content')) {
-                loadEpisodes(folder);
-            } else {
-                loadContent();
-            }
+            loadContent();
         </script>
     </body>
 </html>
