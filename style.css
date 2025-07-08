@@ -33,6 +33,7 @@ body {
     margin: 10px;
     cursor: pointer;
     text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card img {
@@ -43,6 +44,12 @@ body {
 
 .card p {
     color: white;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .skeleton-card {
