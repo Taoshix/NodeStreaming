@@ -10,13 +10,17 @@
     <body>
         <div class="top-bar">Localhost Streaming Site</div>
         <h1 class="content-selection" id="content-selection">Content Selection</h1>
+        <div class="content-section" id="content-section">
+            <div class="container" id="content-container">
+                <!-- Content will be dynamically loaded here -->
+            </div>
+        </div>
         <script>
             async function loadContent() {
                 const response = await fetch('/content');
                 const content = await response.json();
 
-                const container = document.createElement('div');
-                container.className = 'container';
+                container = document.getElementById('content-container');
 
                 content.forEach(item => {
                     const card = document.createElement('div');
@@ -51,11 +55,8 @@
                     }
                 }
 
-                const contentSection = document.createElement('div');
-                contentSection.id = 'content-section';
+                contentSection = document.getElementById('content-section');
                 contentSection.appendChild(container);
-
-                document.body.appendChild(contentSection);
             }
 
             async function loadEpisodes(folder) {
@@ -155,7 +156,7 @@
                 }
                 const contentselection = document.getElementById('content-selection');
                 if (contentselection) {
-                    contentselection.remove();
+                    contentselection.innerHTML = decodeURIComponent(folder);
                 }
 
                 document.body.appendChild(sidebar);
