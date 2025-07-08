@@ -9,6 +9,7 @@
     </head>
     <body>
         <div class="top-bar">Localhost Streaming Site</div>
+        <h1 class="content-selection" id="content-selection">Content Selection</h1>
         <script>
             async function loadContent() {
                 const response = await fetch('/content');
@@ -151,6 +152,10 @@
                 const contentSection = document.getElementById('content-section');
                 if (contentSection) {
                     contentSection.remove();
+                }
+                const contentselection = document.getElementById('content-selection');
+                if (contentselection) {
+                    contentselection.remove();
                 }
 
                 document.body.appendChild(sidebar);
