@@ -22,7 +22,7 @@ body {
     align-items: flex-start;
     margin: 0;
     padding: 0;
-    position: absolute;
+    position: relative;
     top: 15%;
     left: 4%;
     right: 4%;
@@ -53,7 +53,7 @@ body {
 }
 
 .sidebar {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 5%;
     width: 10%;
@@ -80,17 +80,16 @@ body {
 }
 
 .video-player {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative; 
+    margin: 20px auto; 
+    display: block; 
     width: 70%;
     height: auto;
 }
 
 .control-panel {
-    position: absolute;
-    top: 95%; /* Positioned below the video player */
+    position: relative;
+    margin-top: 50px;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70%;
@@ -186,4 +185,15 @@ body.dark-mode {
 body.light-mode {
     background-color: white;
     color: black;
+}
+
+.footer {
+    margin-top: 10px; 
+    text-align: center; 
+    color: white;
+    position: relative; 
+    z-index: 1; 
+    width: 70%; 
+    margin-left: auto; 
+    margin-right: auto; 
 }

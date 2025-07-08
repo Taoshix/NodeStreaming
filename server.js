@@ -16,39 +16,50 @@ app.use((req, res, next) => {
     next();
 });
 
+// Corrected sanitizePath function
+function sanitizePath(input) {
+    return path.normalize(input).replace(/^\.\//, "").replace(/\//g, path.sep);
+}
+
+// Sanitize and validate folder and episode parameters
+function isValidPath(base, target) {
+    const resolvedBase = path.resolve(base);
+    const resolvedTarget = path.resolve(base, target);
+    return resolvedTarget.startsWith(resolvedBase);
+}
+
 // Route to serve the index.html file
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/index.html");
 });
 
-// Route to fetch episodes in a specific folder
+// Updated route to fetch episodes in a specific folder
 app.get("/content/:folder/episodes", function (req, res) {
-    const folder = decodeURIComponent(req.params.folder);
-    console.log("Decoded folder name for episodes:", folder);
-
+    const folder = sanitizePath(decodeURIComponent(req.params.folder));
     const contentDir = path.join(__dirname, "content", folder);
 
-    if (!fs.existsSync(contentDir)) {
-        console.error("Folder not found:", contentDir);
+    if (!isValidPath(path.join(__dirname, "content"), contentDir) || !fs.existsSync(contentDir)) {
+        console.error("Invalid or non-existent folder:", contentDir);
         return res.status(404).send("Folder not found");
     }
 
     const episodes = fs.readdirSync(contentDir, { withFileTypes: true })
-        .filter((dirent) => dirent.isFile() && dirent.name.match(/^\d+\.mp4$/))
+        .filter((dirent) => dirent.isFile() && dirent.name.match(/^[0-9]+\.mp4$/))
         .map((dirent) => dirent.name);
 
     console.log("Episodes found:", episodes);
     res.json(episodes);
 });
 
-// Route to fetch a specific episode
+// Updated route to fetch a specific episode
 app.get("/content/:folder/:episode", function (req, res) {
-    const folder = req.params.folder;
-    const episode = req.params.episode;
+    const folder = sanitizePath(req.params.folder);
+    const episode = sanitizePath(req.params.episode);
     const videoPath = path.join(__dirname, "content", folder, episode);
 
-    if (!fs.existsSync(videoPath)) {
-        return res.status(404).send("File not found at " + videoPath);
+    if (!isValidPath(path.join(__dirname, "content"), videoPath) || !fs.existsSync(videoPath)) {
+        console.error("Invalid or non-existent file:", videoPath);
+        return res.status(404).send("File not found");
     }
 
     const fileExtension = path.extname(videoPath);
