@@ -101,7 +101,7 @@ app.get("/content", function (req, res) {
     const metadata = folders.map((folder) => {
         const folderPath = path.join(contentDir, folder);
         const coverFile = fs.readdirSync(folderPath, { withFileTypes: true })
-            .find((dirent) => dirent.isFile() && dirent.name.match(/\.(webp|jpg|jpeg|png|gif)$/i));
+            .find((dirent) => dirent.isFile() && dirent.name.match(/(cover).(webp|jpg|jpeg|png|gif)$/i));
 
         const coverPath = coverFile ? `/content/${folder}/${coverFile.name}` : null;
         return {
