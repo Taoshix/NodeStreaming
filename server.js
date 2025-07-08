@@ -99,15 +99,16 @@ app.get("/content", function (req, res) {
         .map((dirent) => dirent.name);
 
     const metadata = folders.map((folder) => {
-        const coverPath = path.join(contentDir, folder, "cover.webp");
-        const coverExists = fs.existsSync(coverPath);
+        const folderPath = path.join(contentDir, folder);
+        const coverFile = fs.readdirSync(folderPath, { withFileTypes: true })
+            .find((dirent) => dirent.isFile() && dirent.name.match(/\.(webp|jpg|jpeg|png|gif)$/i));
+
+        const coverPath = coverFile ? `/content/${folder}/${coverFile.name}` : null;
         return {
             title: folder,
-            cover: coverExists ? `/content/${folder}/cover.webp` : null,
+            cover: coverPath,
         };
     });
-
-    // log the metadata to the console
 
     res.json(metadata);
 });
