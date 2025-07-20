@@ -9,20 +9,27 @@
     </head>
     <body>
         <div class="top-bar">Localhost Streaming Site</div>
-        <h1 class="content-selection" id="content-selection"></h1>
         <div class="sidebar">
             <button class="back-button" onclick="window.location.href = '/'">Back</button>
             <div id="episode-list"></div>
         </div>
-        <video class="video-player" controls autoplay muted></video>
-        <div class="control-panel">
-            <button onclick="toggleMode()">Toggle Light/Dark Mode</button>
-            <div class="auto-next-container">
-                <input type="checkbox" id="autoNext" />
-                <label for="autoNext">Auto Next</label>
-            </div>
+        <div class="right-sidebar">
+            <h1 class="show-name-header" id="show-name-header"></h1>
+            <img id="cover-image" class="cover-image" alt="Cover Image" />
         </div>
-        <p class="footer">Made with NodeJS</p>
+        <div class="main-content">
+            <div class="video-container">
+                <video class="video-player" controls autoplay muted></video>
+            </div>
+            <div class="control-panel">
+                <button onclick="toggleMode()">Toggle Light/Dark Mode</button>
+                <div class="auto-next-container">
+                    <input type="checkbox" id="autoNext" />
+                    <label for="autoNext">Auto Next</label>
+                </div>
+            </div>
+            <p class="footer">Made with NodeJS</p>
+        </div>
         <script>
             function toggleMode() {
                 const isDarkMode = document.body.classList.contains('dark-mode');
@@ -33,7 +40,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const folder = urlParams.get('folder');
             const contentName = decodeURIComponent(folder);
-            document.getElementById('content-selection').textContent = contentName;
+            document.getElementById('show-name-header').textContent = contentName;
             document.getElementById('pagetitle').textContent = `Video Player - ${contentName}`;
 
             async function loadEpisodes() {
@@ -75,7 +82,16 @@
                 };
             }
 
+            async function loadCoverImage() {
+                const response = await fetch(`/content/`);
+                const metadata = await response.json();
+                const folderMetadata = metadata.find(item => item.title === contentName);
+                const coverImage = document.getElementById('cover-image');
+                coverImage.src = folderMetadata.cover || 'default-cover.png';
+            }
+
             loadEpisodes();
+            loadCoverImage();
         </script>
     </body>
 </html>
