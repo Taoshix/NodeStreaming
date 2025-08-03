@@ -57,6 +57,30 @@ content/Example Season 1/cover.webp
 3. Add episode files in `.mp4` format to the respective show folder. Name the files numerically (e.g., `1.mp4`, `2.mp4`, etc.).
 4. Add a cover image for the show in the same folder. The cover image can be in any of the following formats: `.webp`, `.jpg`, `.jpeg`, `.png`, or `.gif`.
 
+## Docker Instructions
+
+### Build the Docker Image
+1. Build the Docker image:
+   ```bash
+   docker build -t nodestreaming .
+   ```
+
+### Run the Container
+1. Run the container:
+   ```bash
+   docker run -p 8000:8000 nodestreaming
+   ```
+
+### Using Docker Compose
+1. Start the container using Docker Compose:
+   ```bash
+   docker-compose up
+   ```
+
+### Notes
+- Ensure the `content` folder is properly set up before building the Docker image.
+- The container will automatically detect and serve the content based on the folder structure.
+
 ## Notes
 - Ensure the `content` folder is properly set up before starting the server.
 - The server will automatically detect and serve the content based on the folder structure.
